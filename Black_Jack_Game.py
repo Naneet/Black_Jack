@@ -105,6 +105,10 @@ class Player:
 
         self.player_cards = []
 
+    def last_card_value(self):  # for getting the value of last card
+
+        return self.player_cards[-1]
+
 
 game_on = True  # setting some variables for the game to run
 getting_card = True
@@ -171,12 +175,21 @@ while game_on:
     player.bet(bet_money)
     print(f"\nOne of the card of the dealer is: {bot.player_cards[0]}")
 
+
+
+
+
+
+
+
+    last_card_value = 0
     num_ace_player = player.num_ace()
+    num = player.sum_value()
 
     while getting_card:  # player's turn
 
+        num += last_card_value
         player.display_cards()
-        num = player.sum_value()
 
         if num > 21 and num_ace_player != 0:  # for changing the value of ace to 1 when required
 
@@ -191,6 +204,7 @@ while game_on:
         if num > 21 and num_ace_player == 0:
 
             print("\nBust!! You went over 21!")
+
             getting_card = False
             break
 
@@ -199,6 +213,7 @@ while game_on:
 
         if move == "H":
             player.add_card(new_deck.give_card())
+            last_card_value = player.last_card_value().value
 
             if player.player_cards[-1].rank == 'Ace':
                 num_ace_player = num_ace_player + 1  # if the player gets a new ace then it be added to the tally
@@ -212,16 +227,23 @@ while game_on:
         else:
             print("Invalid move\n")
 
-    num = player.sum_value()
+    print(f"Your value is {num}")
 
     if num > 21:
         dealer_turn = False
 
+
+
+
+
+
+
+
+    last_card_value_dealer = 0
     num_ace = bot.num_ace()
-
+    num_bot = bot.sum_value()
     while dealer_turn:  # dealer's turn
-        num_bot = bot.sum_value()
-
+        num_bot += last_card_value_dealer
         if num_bot > 21 and num_ace != 0:
 
             for z in range(num_ace):
@@ -237,7 +259,7 @@ while game_on:
 
             for cardd in bot.player_cards:
                 print(cardd)
-
+            print(f"The value is {bot.sum_value()}")
             print("\nYou win!!\n")
             player.bet_won(bet_money)
             dealer_turn = False
@@ -252,15 +274,22 @@ while game_on:
 
             for cardd in bot.player_cards:
                 print(cardd)
-
+            print(f"The value is {num_bot}")
             print("\nYou lose!!\n")
             dealer_turn = False
             break
 
         bot.add_card(new_deck.give_card())
+        last_card_value_dealer = bot.last_card_value().value
 
         if bot.player_cards[-1].rank == 'Ace':
             num_ace = num_ace + 1
+
+        print(f"ace number {num_ace}")
+
+
+
+
 
     player.clear_player_deck()
     bot.clear_player_deck()
@@ -276,5 +305,12 @@ while game_on:
 
     elif play == 'N':
         game_on = False
+
+
+
+
+
+
+
 
 
